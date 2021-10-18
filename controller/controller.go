@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"encoding/json"
+	"net/http"
 	"time"
 
 	"../entity"
@@ -17,6 +19,7 @@ type GetStatusService interface {
 	CheckSCBStatus() *entity.Customer
 	CheckAldnStatus() *entity.Customer
 	CheckInsStatus() *entity.Customer
+	CheckBlp(res http.ResponseWriter, req *http.Request)
 }
 
 type statusService struct{}
@@ -125,4 +128,11 @@ func (*statusService) CheckInsStatus() *entity.Customer {
 	c.SystemTime = t.SystemTime
 	c.DiffTime = t.DiffTime
 	return &c
+}
+
+func (*statusService) CheckBlp(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	post := status.CheckBlpStatus()
+	res.WriteHeader(http.StatusOK)
+	json.NewEncoder(res).Encode(&post)
 }

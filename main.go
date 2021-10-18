@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"./controller"
-	"./router"
-	"github.com/karn-ake/go_cns/controller"
+	ctrl "./controller"
+	rtr "./router"
 )
 
 var (
-	controllers controller.GetStatusService = controller.NewGetStatusService()
-	muxRouter   router.MuxRouter            = router.NewMuxRouter()
+	controllers ctrl.GetStatusService = ctrl.NewGetStatusService()
+	muxRouter   rtr.MuxRouter         = rtr.NewMuxRouter()
 )
 
 func main() {
@@ -19,7 +18,7 @@ func main() {
 	muxRouter.GET("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Up and Running")
 	})
-	muxRouter.GET("/api/blp", controller.CheckBlpStatus())
+	muxRouter.GET("/api/blp", controllers.CheckBlp)
 
 	muxRouter.SERV(port)
 }
