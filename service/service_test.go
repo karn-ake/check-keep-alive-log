@@ -5,18 +5,46 @@ import (
 	"testing"
 )
 
-func TestFlogTime(t *testing.T) {
-	var time Service = NewGetService()
-	fmt.Println(time.GetLocalLogTime())
-	fmt.Println(time.GetTimes())
-	fmt.Println(time.GetKALocalLogTime())
-	fmt.Println(time.GetKATimes())
-	fmt.Println(time.GetKSLocalLogTime())
-	fmt.Println(time.GetKSTimes())
-	fmt.Println(time.GetKTLocalLogTime())
-	fmt.Println(time.GetKTTimes())
-	fmt.Println(time.GetMFCLocalLogTime())
-	fmt.Println(time.GetMFCTimes())
-	fmt.Println(time.GetSCBLocalLogTime())
-	fmt.Println(time.GetSCBTimes())
+var ser Service = NewGetService()
+
+func TestGetLocalLogTime(t *testing.T) {
+	fmt.Println(*ser.GetLocalLogTime())
 }
+
+
+func TestGetTime(t *testing.T) {
+	fmt.Println(ser.GetTimes())
+}
+
+/*
+func TestGetKALocalLogTime(t *testing.T) {
+	fmt.Println(ser.GetKALocalLogTime())
+}
+func TestGetKATime(t *testing.T) {
+	fmt.Println(ser.GetKATimes())
+}
+func TestGetKSLocalLogTime(t *testing.T) {
+	fmt.Println(ser.GetKSLocalLogTime())
+}
+func TestGetKSTime(t *testing.T) {
+	fmt.Println(ser.GetKSTimes())
+}
+func TestGetKTLocalLogTime(t *testing.T) {
+	fmt.Println(ser.GetKTLocalLogTime())
+}
+func TestGetKTTime(t *testing.T) {
+	fmt.Println(ser.GetKTTimes())
+}
+func TestGetMFCLocalLogTime(t *testing.T) {
+	fmt.Println(ser.GetMFCLocalLogTime())
+}
+func TestGetMFCTime(t *testing.T) {
+	fmt.Println(ser.GetMFCTimes())
+}
+func TestGetSCBLocalLogTime(t *testing.T) {
+	fmt.Println(ser.GetSCBLocalLogTime())
+}
+func TestGetSCBTime(t *testing.T) {
+	fmt.Println(ser.GetSCBTimes())
+}
+*/
