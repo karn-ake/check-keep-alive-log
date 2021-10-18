@@ -1,24 +1,25 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 
-	"./handler"
+	"./controller"
+	"./router"
+	"github.com/karn-ake/go_cns/controller"
 )
 
 var (
-	route handler.Handler = handler.NewGetHandler()
+	controllers controller.GetStatusService = controller.NewGetStatusService()
+	muxRouter   router.MuxRouter            = router.NewMuxRouter()
 )
 
 func main() {
-	http.HandleFunc("/api/blp", route.BlpHandler)
-	http.HandleFunc("/api/kasikorn", route.KAHandler)
-	http.HandleFunc("/api/ks", route.KSHandler)
-	http.HandleFunc("/api/kt", route.KTHandler)
-	http.HandleFunc("/api/mfc", route.MFCHandler)
-	http.HandleFunc("/api/scb", route.SCBHandler)
-	http.HandleFunc("/api/aldn", route.AldnHandler)
-	http.HandleFunc("/api/ins", route.InsHandler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	const port string = ":8080"
+	muxRouter.GET("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "Up and Running")
+	})
+	muxRouter.GET("/api/blp", controller.CheckBlpStatus())
+
+	muxRouter.SERV(port)
 }

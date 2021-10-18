@@ -8,15 +8,15 @@ import (
 )
 
 type GetStatusService interface {
-	CheckStatus(t entity.AllTime) bool
-	CheckBlpStatus() entity.Alert
-	CheckKAStatus() entity.Alert
-	CheckKSStatus() entity.Alert
-	CheckKTStatus() entity.Alert
-	CheckMFCStatus() entity.Alert
-	CheckSCBStatus() entity.Alert
-	CheckAldnStatus() entity.Alert
-	CheckInsStatus() entity.Alert
+	CheckStatus(*entity.AllTime) bool
+	CheckBlpStatus() *entity.Customer
+	CheckKAStatus() *entity.Customer
+	CheckKSStatus() *entity.Customer
+	CheckKTStatus() *entity.Customer
+	CheckMFCStatus() *entity.Customer
+	CheckSCBStatus() *entity.Customer
+	CheckAldnStatus() *entity.Customer
+	CheckInsStatus() *entity.Customer
 }
 
 type statusService struct{}
@@ -26,17 +26,20 @@ type statusService struct{}
 */
 
 var (
-	serv service.Service = service.NewGetService()
+	serv   service.Service = service.NewGetService()
+	status                 = NewGetStatusService()
+	c      entity.Customer
 )
 
 func NewGetStatusService() GetStatusService {
 	return &statusService{}
 }
 
-func (s *statusService) CheckStatus(t entity.AllTime) bool {
+func (*statusService) CheckStatus(*entity.AllTime) bool {
 	st := 2 * time.Minute
+	var ta entity.AllTime
 	var status bool
-	if t.DiffTime > st {
+	if ta.DiffTime > st {
 		status = false
 	} else {
 		status = true
@@ -44,58 +47,82 @@ func (s *statusService) CheckStatus(t entity.AllTime) bool {
 	return status
 }
 
-func (s *statusService) CheckBlpStatus() (e entity.Alert) {
+func (*statusService) CheckBlpStatus() *entity.Customer {
 	t := serv.GetTimes()
-	e.Client = "BLP"
-	e.Status = s.CheckStatus(t)
-	return e
+	c.Client = "BLP"
+	c.Status = status.CheckStatus(t)
+	c.LogTime = t.LogTime
+	c.SystemTime = t.SystemTime
+	c.DiffTime = t.DiffTime
+	return &c
 }
 
-func (s *statusService) CheckKAStatus() (e entity.Alert) {
+func (*statusService) CheckKAStatus() *entity.Customer {
 	t := serv.GetKATimes()
-	e.Client = "KASIKORN"
-	e.Status = s.CheckStatus(t)
-	return e
+	c.Client = "KASIKORN"
+	c.Status = status.CheckStatus(t)
+	c.LogTime = t.LogTime
+	c.SystemTime = t.SystemTime
+	c.DiffTime = t.DiffTime
+	return &c
 }
 
-func (s *statusService) CheckKSStatus() (e entity.Alert) {
+func (*statusService) CheckKSStatus() *entity.Customer {
 	t := serv.GetKSTimes()
-	e.Client = "KSAMCRD"
-	e.Status = s.CheckStatus(t)
-	return e
+	c.Client = "KSAMCRD"
+	c.Status = status.CheckStatus(t)
+	c.LogTime = t.LogTime
+	c.SystemTime = t.SystemTime
+	c.DiffTime = t.DiffTime
+	return &c
 }
 
-func (s *statusService) CheckKTStatus() (e entity.Alert) {
+func (*statusService) CheckKTStatus() *entity.Customer {
 	t := serv.GetKTTimes()
-	e.Client = "KTAMCRD"
-	e.Status = s.CheckStatus(t)
-	return e
+	c.Client = "KTAMCRD"
+	c.Status = status.CheckStatus(t)
+	c.LogTime = t.LogTime
+	c.SystemTime = t.SystemTime
+	c.DiffTime = t.DiffTime
+	return &c
 }
 
-func (s *statusService) CheckMFCStatus() (e entity.Alert) {
+func (*statusService) CheckMFCStatus() *entity.Customer {
 	t := serv.GetMFCTimes()
-	e.Client = "MFCAMCRD"
-	e.Status = s.CheckStatus(t)
-	return e
+	c.Client = "MFCAMCRD"
+	c.Status = status.CheckStatus(t)
+	c.LogTime = t.LogTime
+	c.SystemTime = t.SystemTime
+	c.DiffTime = t.DiffTime
+	return &c
 }
 
-func (s *statusService) CheckSCBStatus() (e entity.Alert) {
+func (*statusService) CheckSCBStatus() *entity.Customer {
 	t := serv.GetSCBTimes()
-	e.Client = "SCBAMCRD"
-	e.Status = s.CheckStatus(t)
-	return e
+	c.Client = "SCBAMCRD"
+	c.Status = status.CheckStatus(t)
+	c.LogTime = t.LogTime
+	c.SystemTime = t.SystemTime
+	c.DiffTime = t.DiffTime
+	return &c
 }
 
-func (s *statusService) CheckAldnStatus() (e entity.Alert) {
+func (*statusService) CheckAldnStatus() *entity.Customer {
 	t := serv.GetSCBTimes()
-	e.Client = "NYFIX"
-	e.Status = s.CheckStatus(t)
-	return e
+	c.Client = "NYFIX"
+	c.Status = status.CheckStatus(t)
+	c.LogTime = t.LogTime
+	c.SystemTime = t.SystemTime
+	c.DiffTime = t.DiffTime
+	return &c
 }
 
-func (s *statusService) CheckInsStatus() (e entity.Alert) {
+func (*statusService) CheckInsStatus() *entity.Customer {
 	t := serv.GetSCBTimes()
-	e.Client = "INSTINET"
-	e.Status = s.CheckStatus(t)
-	return e
+	c.Client = "INSTINET"
+	c.Status = status.CheckStatus(t)
+	c.LogTime = t.LogTime
+	c.SystemTime = t.SystemTime
+	c.DiffTime = t.DiffTime
+	return &c
 }
