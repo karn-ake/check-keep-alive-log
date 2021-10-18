@@ -1,24 +1,24 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 
-	"./handler"
+	ctrl "./controller"
+	rtr "./router"
 )
 
 var (
-	route handler.Handler = handler.NewGetHandler()
+	controllers ctrl.GetStatusService = ctrl.NewGetStatusService()
+	muxRouter   rtr.MuxRouter         = rtr.NewMuxRouter()
 )
 
 func main() {
-	http.HandleFunc("/api/blp", route.BlpHandler)
-	http.HandleFunc("/api/kasikorn", route.KAHandler)
-	http.HandleFunc("/api/ks", route.KSHandler)
-	http.HandleFunc("/api/kt", route.KTHandler)
-	http.HandleFunc("/api/mfc", route.MFCHandler)
-	http.HandleFunc("/api/scb", route.SCBHandler)
-	http.HandleFunc("/api/aldn", route.AldnHandler)
-	http.HandleFunc("/api/ins", route.InsHandler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	const port string = ":8080"
+	muxRouter.GET("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "Up and Running")
+	})
+	muxRouter.GET("/api/blp", controllers.CheckBlp)
+
+	muxRouter.SERV(port)
 }

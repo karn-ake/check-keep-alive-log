@@ -1,3 +1,3 @@
-module github.com/karn-ake/go_cns
+module github.com/karn-ake/check-keep-alive-log
 
 go 1.17
