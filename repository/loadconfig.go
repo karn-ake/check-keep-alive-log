@@ -2,15 +2,15 @@ package repository
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 
 	"../entity"
 )
 
+const fCfg = "D:\\Scripts\\Go\\FIX1-SET\\config\\fileconfig.json"
+
 type Repository interface {
-	processError(err error)
-	LoadConfig(cfg *entity.FileConfig)
+	LoadConfig(cfg *entity.FileConfig) error
 }
 
 type getRepository struct{}
@@ -19,20 +19,18 @@ func NewGetRepository() Repository {
 	return &getRepository{}
 }
 
-func (*getRepository) processError(err error) {
-	fmt.Println(err)
-	os.Exit(2)
-}
-func (r *getRepository) LoadConfig(cfg *entity.FileConfig) {
-	f, err := os.Open("F:\\Go\\FIX1-SET\\config\\fileconfig.json")
+func (r *getRepository) LoadConfig(cfg *entity.FileConfig) error {
+	//	f, err := os.Open("F:\\Go\\FIX1-SET\\config\\fileconfig.json")
+	f, err := os.Open(fCfg)
 	if err != nil {
-		r.processError(err)
+		return err
 	}
 	defer f.Close()
 
 	decoder := json.NewDecoder(f)
 	err = decoder.Decode(cfg)
 	if err != nil {
-		r.processError(err)
+		return err
 	}
+	return nil
 }

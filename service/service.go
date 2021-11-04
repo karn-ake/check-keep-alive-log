@@ -40,6 +40,8 @@ var (
 	a    entity.AllTime
 )
 
+const layout = "20060102-15:04:05"
+
 func NewGetService() Service {
 	return &getService{}
 }
@@ -86,7 +88,6 @@ func (*getService) GetLocalLogTime() *string {
 
 func (*getService) GetTimes() *entity.AllTime {
 	locallogtime := serv.GetLocalLogTime()
-	layout := "20060102-15:04:05"
 	lt, _ := time.Parse(layout, *locallogtime)
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
@@ -116,7 +117,6 @@ func (*getService) GetKALocalLogTime() *string {
 
 func (*getService) GetKATimes() *entity.AllTime {
 	locallogtime := serv.GetKALocalLogTime()
-	layout := "20060102-15:04:05"
 	lt, _ := time.Parse(layout, *locallogtime)
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
@@ -146,7 +146,7 @@ func (*getService) GetKSLocalLogTime() *string {
 
 func (*getService) GetKSTimes() *entity.AllTime {
 	locallogtime := serv.GetKSLocalLogTime()
-	layout := "20060102-15:04:05"
+//	layout := "20060102-15:04:05"
 	lt, _ := time.Parse(layout, *locallogtime)
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
@@ -176,7 +176,7 @@ func (*getService) GetKTLocalLogTime() *string {
 
 func (*getService) GetKTTimes() *entity.AllTime {
 	locallogtime := serv.GetKTLocalLogTime()
-	layout := "20060102-15:04:05"
+//	layout := "20060102-15:04:05"
 	lt, _ := time.Parse(layout, *locallogtime)
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
@@ -206,7 +206,7 @@ func (*getService) GetMFCLocalLogTime() *string {
 
 func (*getService) GetMFCTimes() *entity.AllTime {
 	locallogtime := serv.GetMFCLocalLogTime()
-	layout := "20060102-15:04:05"
+//	layout := "20060102-15:04:05"
 	lt, _ := time.Parse(layout, *locallogtime)
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
@@ -236,7 +236,7 @@ func (*getService) GetSCBLocalLogTime() *string {
 
 func (*getService) GetSCBTimes() *entity.AllTime {
 	locallogtime := serv.GetSCBLocalLogTime()
-	layout := "20060102-15:04:05"
+//	layout := "20060102-15:04:05"
 	lt, _ := time.Parse(layout, *locallogtime)
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
@@ -266,7 +266,7 @@ func (*getService) GetAldnLocalLogTime() *string {
 
 func (*getService) GetAldnTimes() *entity.AllTime {
 	locallogtime := serv.GetAldnLocalLogTime()
-	layout := "20060102-15:04:05"
+//	layout := "20060102-15:04:05"
 	lt, _ := time.Parse(layout, *locallogtime)
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
@@ -296,7 +296,7 @@ func (*getService) GetInsLocalLogTime() *string {
 
 func (*getService) GetInsTimes() *entity.AllTime {
 	locallogtime := serv.GetInsLocalLogTime()
-	layout := "20060102-15:04:05"
+//	layout := "20060102-15:04:05"
 	lt, _ := time.Parse(layout, *locallogtime)
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
