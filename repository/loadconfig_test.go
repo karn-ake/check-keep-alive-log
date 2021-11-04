@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"../entity"
+	"github.com/karn-ake/check-keep-alive-log/entity"
 )
 
 func TestLoadConfig(t *testing.T) {
@@ -14,6 +14,6 @@ func TestLoadConfig(t *testing.T) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Printf("%v", cfg.BlpFile)
-	fmt.Printf("%v", cfg.ClvFile)
+	fmt.Printf("%#v", cfg.BlpFile)
+	fmt.Printf("%#v", cfg.ClvFile)
 }

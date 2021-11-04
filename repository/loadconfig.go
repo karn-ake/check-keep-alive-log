@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
-	"../entity"
+	"github.com/karn-ake/check-keep-alive-log/entity"
 )
 
 const fCfg = "D:\\Scripts\\Go\\FIX1-SET\\config\\fileconfig.json"

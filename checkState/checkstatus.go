@@ -3,20 +3,20 @@ package checkState
 import (
 	"time"
 
-	"../entity"
-	"../service"
+	"github.com/karn-ake/check-keep-alive-log/entity"
+	"github.com/karn-ake/check-keep-alive-log/service"
 )
 
 type GetStatusService interface {
 	CheckStatus(ta *entity.AllTime) bool
-	CheckBlpStatus() *entity.Customer
-	CheckKAStatus() *entity.Customer
-	CheckKSStatus() *entity.Customer
-	CheckKTStatus() *entity.Customer
-	CheckMFCStatus() *entity.Customer
-	CheckSCBStatus() *entity.Customer
-	CheckAldnStatus() *entity.Customer
-	CheckInsStatus() *entity.Customer
+	CheckBlpStatus() (*entity.Customer, error)
+	CheckKAStatus() (*entity.Customer, error)
+	CheckKSStatus() (*entity.Customer, error)
+	CheckKTStatus() (*entity.Customer, error)
+	CheckMFCStatus() (*entity.Customer, error)
+	CheckSCBStatus() (*entity.Customer, error)
+	CheckAldnStatus() (*entity.Customer, error)
+	CheckInsStatus() (*entity.Customer, error)
 }
 
 type statusService struct{}
@@ -44,82 +44,106 @@ func (*statusService) CheckStatus(ta *entity.AllTime) bool {
 	return s
 }
 
-func (*statusService) CheckBlpStatus() *entity.Customer {
-	t := serv.GetTimes()
+func (*statusService) CheckBlpStatus() (*entity.Customer, error) {
+	t, err := serv.GetTimes()
+	if err != nil {
+		return nil, err
+	}
 	c.Client = "BLP"
 	c.Status = status.CheckStatus(t)
 	c.LogTime = t.LogTime
 	c.SystemTime = t.SystemTime
 	c.DiffTime = t.DiffTime
-	return &c
+	return &c, nil
 }
 
-func (*statusService) CheckKAStatus() *entity.Customer {
-	t := serv.GetKATimes()
+func (*statusService) CheckKAStatus() (*entity.Customer, error) {
+	t, err := serv.GetKATimes()
+	if err != nil {
+		return nil, err
+	}
 	c.Client = "KASIKORN"
 	c.Status = status.CheckStatus(t)
 	c.LogTime = t.LogTime
 	c.SystemTime = t.SystemTime
 	c.DiffTime = t.DiffTime
-	return &c
+	return &c, nil
 }
 
-func (*statusService) CheckKSStatus() *entity.Customer {
-	t := serv.GetKSTimes()
+func (*statusService) CheckKSStatus() (*entity.Customer, error) {
+	t, err := serv.GetKSTimes()
+	if err != nil {
+		return nil, err
+	}
 	c.Client = "KSAMCRD"
 	c.Status = status.CheckStatus(t)
 	c.LogTime = t.LogTime
 	c.SystemTime = t.SystemTime
 	c.DiffTime = t.DiffTime
-	return &c
+	return &c, nil
 }
 
-func (*statusService) CheckKTStatus() *entity.Customer {
-	t := serv.GetKTTimes()
+func (*statusService) CheckKTStatus() (*entity.Customer, error) {
+	t, err := serv.GetKTTimes()
+	if err != nil {
+		return nil, err
+	}
 	c.Client = "KTAMCRD"
 	c.Status = status.CheckStatus(t)
 	c.LogTime = t.LogTime
 	c.SystemTime = t.SystemTime
 	c.DiffTime = t.DiffTime
-	return &c
+	return &c, nil
 }
 
-func (*statusService) CheckMFCStatus() *entity.Customer {
-	t := serv.GetMFCTimes()
+func (*statusService) CheckMFCStatus() (*entity.Customer, error) {
+	t, err := serv.GetMFCTimes()
+	if err != nil {
+		return nil, err
+	}
 	c.Client = "MFCAMCRD"
 	c.Status = status.CheckStatus(t)
 	c.LogTime = t.LogTime
 	c.SystemTime = t.SystemTime
 	c.DiffTime = t.DiffTime
-	return &c
+	return &c, nil
 }
 
-func (*statusService) CheckSCBStatus() *entity.Customer {
-	t := serv.GetSCBTimes()
+func (*statusService) CheckSCBStatus() (*entity.Customer, error) {
+	t, err := serv.GetSCBTimes()
+	if err != nil {
+		return nil, err
+	}
 	c.Client = "SCBAMCRD"
 	c.Status = status.CheckStatus(t)
 	c.LogTime = t.LogTime
 	c.SystemTime = t.SystemTime
 	c.DiffTime = t.DiffTime
-	return &c
+	return &c, nil
 }
 
-func (*statusService) CheckAldnStatus() *entity.Customer {
-	t := serv.GetSCBTimes()
+func (*statusService) CheckAldnStatus() (*entity.Customer, error) {
+	t, err := serv.GetSCBTimes()
+	if err != nil {
+		return nil, err
+	}
 	c.Client = "NYFIX"
 	c.Status = status.CheckStatus(t)
 	c.LogTime = t.LogTime
 	c.SystemTime = t.SystemTime
 	c.DiffTime = t.DiffTime
-	return &c
+	return &c, nil
 }
 
-func (*statusService) CheckInsStatus() *entity.Customer {
-	t := serv.GetSCBTimes()
+func (*statusService) CheckInsStatus() (*entity.Customer, error) {
+	t, err := serv.GetSCBTimes()
+	if err != nil {
+		return nil, err
+	}
 	c.Client = "INSTINET"
 	c.Status = status.CheckStatus(t)
 	c.LogTime = t.LogTime
 	c.SystemTime = t.SystemTime
 	c.DiffTime = t.DiffTime
-	return &c
+	return &c, nil
 }

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	ctrl "./controller"
-	rtr "./router"
+	ctrl "github.com/karn-ake/check-keep-alive-log/controller"
+	rtr "github.com/karn-ake/check-keep-alive-log/router"
 )
 
 var (

@@ -2,34 +2,33 @@ package service
 
 import (
 	"bufio"
-	"log"
 	"os"
 	"regexp"
 	"strings"
 	"time"
 
-	"../entity"
-	"../repository"
+	"github.com/karn-ake/check-keep-alive-log/entity"
+	"github.com/karn-ake/check-keep-alive-log/repository"
 )
 
 type Service interface {
-	RevFile(fName string) *[]string
-	GetLocalLogTime() *string
-	GetTimes() *entity.AllTime
-	GetKALocalLogTime() *string
-	GetKATimes() *entity.AllTime
-	GetKSLocalLogTime() *string
-	GetKSTimes() *entity.AllTime
-	GetKTLocalLogTime() *string
-	GetKTTimes() *entity.AllTime
-	GetMFCLocalLogTime() *string
-	GetMFCTimes() *entity.AllTime
-	GetSCBLocalLogTime() *string
-	GetSCBTimes() *entity.AllTime
-	GetAldnLocalLogTime() *string
-	GetAldnTimes() *entity.AllTime
-	GetInsLocalLogTime() *string
-	GetInsTimes() *entity.AllTime
+	RevFile(fName *string) (*[]string, error)
+	GetLocalLogTime() (*string, error)
+	GetTimes() (*entity.AllTime, error)
+	GetKALocalLogTime() (*string, error)
+	GetKATimes() (*entity.AllTime, error)
+	GetKSLocalLogTime() (*string, error)
+	GetKSTimes() (*entity.AllTime, error)
+	GetKTLocalLogTime() (*string, error)
+	GetKTTimes() (*entity.AllTime, error)
+	GetMFCLocalLogTime() (*string, error)
+	GetMFCTimes() (*entity.AllTime, error)
+	GetSCBLocalLogTime() (*string, error)
+	GetSCBTimes() (*entity.AllTime, error)
+	GetAldnLocalLogTime() (*string, error)
+	GetAldnTimes() (*entity.AllTime, error)
+	GetInsLocalLogTime() (*string, error)
+	GetInsTimes() (*entity.AllTime, error)
 }
 
 type getService struct{}
@@ -46,10 +45,10 @@ func NewGetService() Service {
 	return &getService{}
 }
 
-func (*getService) RevFile(fName string) *[]string {
-	file, err := os.Open(fName)
+func (*getService) RevFile(fName *string) (*[]string, error) {
+	file, err := os.Open(*fName)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	defer file.Close()
 
@@ -65,13 +64,19 @@ func (*getService) RevFile(fName string) *[]string {
 		names[i], names[j] = names[j], names[i]
 	}
 
-	return &names
+	return &names, nil
 }
 
-func (*getService) GetLocalLogTime() *string {
+func (*getService) GetLocalLogTime() (*string, error) {
 	var file entity.FileConfig
-	repo.LoadConfig(&file)
-	rFile := serv.RevFile(file.BlpFile)
+	err := repo.LoadConfig(&file)
+	if err != nil {
+		return nil, err
+	}
+	rFile, err := serv.RevFile(&file.BlpFile)
+	if err != nil {
+		return nil, err
+	}
 	var logs []string
 	for i, line := range *rFile {
 		if i > 100 {
@@ -83,22 +88,34 @@ func (*getService) GetLocalLogTime() *string {
 		logs = append(logs, log)
 	}
 	log := logs[0]
-	return &log
+	return &log, nil
 }
 
-func (*getService) GetTimes() *entity.AllTime {
-	locallogtime := serv.GetLocalLogTime()
-	lt, _ := time.Parse(layout, *locallogtime)
+func (*getService) GetTimes() (*entity.AllTime, error) {
+	locallogtime, err := serv.GetLocalLogTime()
+	if err != nil {
+		return nil, err
+	}
+	lt, err := time.Parse(layout, *locallogtime)
+	if err != nil {
+		return nil, err
+	}
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
 	a.DiffTime = a.SystemTime.Sub(a.LogTime)
-	return &a
+	return &a, nil
 }
 
-func (*getService) GetKALocalLogTime() *string {
+func (*getService) GetKALocalLogTime() (*string, error) {
 	var file entity.FileConfig
-	repo.LoadConfig(&file)
-	rFile := serv.RevFile(file.ClvFile)
+	err := repo.LoadConfig(&file)
+	if err != nil {
+		return nil, err
+	}
+	rFile, err := serv.RevFile(&file.ClvFile)
+	if err != nil {
+		return nil, err
+	}
 	var logs []string
 	for i, line := range *rFile {
 		if i > 100 {
@@ -112,22 +129,36 @@ func (*getService) GetKALocalLogTime() *string {
 		}
 	}
 	log := logs[0]
-	return &log
+	return &log, nil
 }
 
-func (*getService) GetKATimes() *entity.AllTime {
-	locallogtime := serv.GetKALocalLogTime()
-	lt, _ := time.Parse(layout, *locallogtime)
+func (*getService) GetKATimes() (*entity.AllTime, error) {
+	locallogtime, err := serv.GetKALocalLogTime()
+	if err != nil {
+		return nil, err
+	}
+	lt, err := time.Parse(layout, *locallogtime)
+	if err != nil {
+		return nil, err
+	}
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
 	a.DiffTime = a.SystemTime.Sub(a.LogTime)
-	return &a
+	return &a, nil
 }
 
-func (*getService) GetKSLocalLogTime() *string {
+func (*getService) GetKSLocalLogTime() (*string, error) {
 	var file entity.FileConfig
-	repo.LoadConfig(&file)
-	rFile := serv.RevFile(file.ClvFile)
+	err := repo.LoadConfig(&file)
+	if err != nil {
+		return nil, err
+	}
+
+	rFile, err := serv.RevFile(&file.ClvFile)
+	if err != nil {
+		return nil, err
+	}
+
 	var logs []string
 	for i, line := range *rFile {
 		if i > 100 {
@@ -141,23 +172,37 @@ func (*getService) GetKSLocalLogTime() *string {
 		}
 	}
 	log := logs[0]
-	return &log
+	return &log, nil
 }
 
-func (*getService) GetKSTimes() *entity.AllTime {
-	locallogtime := serv.GetKSLocalLogTime()
-//	layout := "20060102-15:04:05"
-	lt, _ := time.Parse(layout, *locallogtime)
+func (*getService) GetKSTimes() (*entity.AllTime, error) {
+	locallogtime, err := serv.GetKSLocalLogTime()
+	if err != nil {
+		return nil, err
+	}
+
+	lt, err := time.Parse(layout, *locallogtime)
+	if err != nil {
+		return nil, err
+	}
+
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
 	a.DiffTime = a.SystemTime.Sub(a.LogTime)
-	return &a
+	return &a, nil
 }
 
-func (*getService) GetKTLocalLogTime() *string {
+func (*getService) GetKTLocalLogTime() (*string, error) {
 	var file entity.FileConfig
-	repo.LoadConfig(&file)
-	rFile := serv.RevFile(file.ClvFile)
+	err := repo.LoadConfig(&file)
+	if err != nil {
+		return nil, err
+	}
+
+	rFile, err := serv.RevFile(&file.ClvFile)
+	if err != nil {
+		return nil, err
+	}
 	var logs []string
 	for i, line := range *rFile {
 		if i > 100 {
@@ -171,23 +216,37 @@ func (*getService) GetKTLocalLogTime() *string {
 		}
 	}
 	log := logs[0]
-	return &log
+	return &log, nil
 }
 
-func (*getService) GetKTTimes() *entity.AllTime {
-	locallogtime := serv.GetKTLocalLogTime()
-//	layout := "20060102-15:04:05"
-	lt, _ := time.Parse(layout, *locallogtime)
+func (*getService) GetKTTimes() (*entity.AllTime, error) {
+	locallogtime, err := serv.GetKTLocalLogTime()
+	if err != nil {
+		return nil, err
+	}
+
+	lt, err := time.Parse(layout, *locallogtime)
+	if err != nil {
+		return nil, err
+	}
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
 	a.DiffTime = a.SystemTime.Sub(a.LogTime)
-	return &a
+	return &a, nil
 }
 
-func (*getService) GetMFCLocalLogTime() *string {
+func (*getService) GetMFCLocalLogTime() (*string, error) {
 	var file entity.FileConfig
-	repo.LoadConfig(&file)
-	rFile := serv.RevFile(file.ClvFile)
+	err := repo.LoadConfig(&file)
+	if err != nil {
+		return nil, err
+	}
+
+	rFile, err := serv.RevFile(&file.ClvFile)
+	if err != nil {
+		return nil, err
+	}
+
 	var logs []string
 	for i, line := range *rFile {
 		if i > 100 {
@@ -201,23 +260,37 @@ func (*getService) GetMFCLocalLogTime() *string {
 		}
 	}
 	log := logs[0]
-	return &log
+	return &log, nil
 }
 
-func (*getService) GetMFCTimes() *entity.AllTime {
-	locallogtime := serv.GetMFCLocalLogTime()
-//	layout := "20060102-15:04:05"
-	lt, _ := time.Parse(layout, *locallogtime)
+func (*getService) GetMFCTimes() (*entity.AllTime, error) {
+	locallogtime, err := serv.GetMFCLocalLogTime()
+	if err != nil {
+		return nil, err
+	}
+
+	lt, err := time.Parse(layout, *locallogtime)
+	if err != nil {
+		return nil, err
+	}
+
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
 	a.DiffTime = a.SystemTime.Sub(a.LogTime)
-	return &a
+	return &a, nil
 }
 
-func (*getService) GetSCBLocalLogTime() *string {
+func (*getService) GetSCBLocalLogTime() (*string, error) {
 	var file entity.FileConfig
-	repo.LoadConfig(&file)
-	rFile := serv.RevFile(file.ClvFile)
+	err := repo.LoadConfig(&file)
+	if err != nil {
+		return nil, err
+	}
+	rFile, err := serv.RevFile(&file.ClvFile)
+	if err != nil {
+		return nil, err
+	}
+
 	var logs []string
 	for i, line := range *rFile {
 		if i > 100 {
@@ -231,23 +304,38 @@ func (*getService) GetSCBLocalLogTime() *string {
 		}
 	}
 	log := logs[0]
-	return &log
+	return &log, nil
 }
 
-func (*getService) GetSCBTimes() *entity.AllTime {
-	locallogtime := serv.GetSCBLocalLogTime()
-//	layout := "20060102-15:04:05"
-	lt, _ := time.Parse(layout, *locallogtime)
+func (*getService) GetSCBTimes() (*entity.AllTime, error) {
+	locallogtime, err := serv.GetSCBLocalLogTime()
+	if err != nil {
+		return nil, err
+	}
+
+	lt, err := time.Parse(layout, *locallogtime)
+	if err != nil {
+		return nil, err
+	}
+
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
 	a.DiffTime = a.SystemTime.Sub(a.LogTime)
-	return &a
+	return &a, nil
 }
 
-func (*getService) GetAldnLocalLogTime() *string {
+func (*getService) GetAldnLocalLogTime() (*string, error) {
 	var file entity.FileConfig
-	repo.LoadConfig(&file)
-	rFile := serv.RevFile(file.AldnFile)
+	err := repo.LoadConfig(&file)
+	if err != nil {
+		return nil, err
+	}
+
+	rFile, err := serv.RevFile(&file.AldnFile)
+	if err != nil {
+		return nil, err
+	}
+
 	var logs []string
 	for i, line := range *rFile {
 		if i > 100 {
@@ -261,23 +349,38 @@ func (*getService) GetAldnLocalLogTime() *string {
 		}
 	}
 	log := logs[0]
-	return &log
+	return &log, nil
 }
 
-func (*getService) GetAldnTimes() *entity.AllTime {
-	locallogtime := serv.GetAldnLocalLogTime()
-//	layout := "20060102-15:04:05"
-	lt, _ := time.Parse(layout, *locallogtime)
+func (*getService) GetAldnTimes() (*entity.AllTime, error) {
+	locallogtime, err := serv.GetAldnLocalLogTime()
+	if err != nil {
+		return nil, err
+	}
+
+	lt, err := time.Parse(layout, *locallogtime)
+	if err != nil {
+		return nil, err
+	}
+
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
 	a.DiffTime = a.SystemTime.Sub(a.LogTime)
-	return &a
+	return &a, nil
 }
 
-func (*getService) GetInsLocalLogTime() *string {
+func (*getService) GetInsLocalLogTime() (*string, error) {
 	var file entity.FileConfig
-	repo.LoadConfig(&file)
-	rFile := serv.RevFile(file.InsFile)
+	err := repo.LoadConfig(&file)
+	if err != nil {
+		return nil, err
+	}
+
+	rFile, err := serv.RevFile(&file.InsFile)
+	if err != nil {
+		return nil, err
+	}
+
 	var logs []string
 	for i, line := range *rFile {
 		if i > 100 {
@@ -291,15 +394,22 @@ func (*getService) GetInsLocalLogTime() *string {
 		}
 	}
 	log := logs[0]
-	return &log
+	return &log, nil
 }
 
-func (*getService) GetInsTimes() *entity.AllTime {
-	locallogtime := serv.GetInsLocalLogTime()
-//	layout := "20060102-15:04:05"
-	lt, _ := time.Parse(layout, *locallogtime)
+func (*getService) GetInsTimes() (*entity.AllTime, error) {
+	locallogtime, err := serv.GetInsLocalLogTime()
+	if err != nil {
+		return nil, err
+	}
+
+	lt, err := time.Parse(layout, *locallogtime)
+	if err != nil {
+		return nil, err
+	}
+
 	a.LogTime = lt.Add(time.Hour * 7)
 	a.SystemTime = time.Now()
 	a.DiffTime = a.SystemTime.Sub(a.LogTime)
-	return &a
+	return &a, nil
 }
