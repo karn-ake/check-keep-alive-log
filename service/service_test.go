@@ -8,12 +8,11 @@ import (
 var ser Service = NewGetService()
 
 func TestGetLocalLogTime(t *testing.T) {
-	fmt.Println(ser.GetLocalLogTime())
+	fmt.Println(ser.GetBLPLocalLogTime())
 }
 
-
 func TestGetTime(t *testing.T) {
-	fmt.Println(ser.GetTimes())
+	fmt.Println(ser.GetBLPTimes())
 }
 
 /*

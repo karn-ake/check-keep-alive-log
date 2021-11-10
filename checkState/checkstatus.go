@@ -45,7 +45,7 @@ func (*statusService) CheckStatus(ta *entity.AllTime) bool {
 }
 
 func (*statusService) CheckBlpStatus() (*entity.Customer, error) {
-	t, err := serv.GetTimes()
+	t, err := serv.GetBLPTimes()
 	if err != nil {
 		return nil, err
 	}

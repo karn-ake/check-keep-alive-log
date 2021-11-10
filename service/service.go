@@ -13,8 +13,8 @@ import (
 
 type Service interface {
 	RevFile(fName *string) (*[]string, error)
-	GetLocalLogTime() (*string, error)
-	GetTimes() (*entity.AllTime, error)
+	GetBLPLocalLogTime() (*string, error)
+	GetBLPTimes() (*entity.AllTime, error)
 	GetKALocalLogTime() (*string, error)
 	GetKATimes() (*entity.AllTime, error)
 	GetKSLocalLogTime() (*string, error)
@@ -67,7 +67,7 @@ func (*getService) RevFile(fName *string) (*[]string, error) {
 	return &names, nil
 }
 
-func (*getService) GetLocalLogTime() (*string, error) {
+func (*getService) GetBLPLocalLogTime() (*string, error) {
 	var file entity.FileConfig
 	err := repo.LoadConfig(&file)
 	if err != nil {
@@ -91,8 +91,8 @@ func (*getService) GetLocalLogTime() (*string, error) {
 	return &log, nil
 }
 
-func (*getService) GetTimes() (*entity.AllTime, error) {
-	locallogtime, err := serv.GetLocalLogTime()
+func (*getService) GetBLPTimes() (*entity.AllTime, error) {
+	locallogtime, err := serv.GetBLPLocalLogTime()
 	if err != nil {
 		return nil, err
 	}
