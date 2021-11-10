@@ -14,7 +14,7 @@ var (
 )
 
 func main() {
-	const port string = ":8080"
+	const port string = ":8082"
 	muxRouter.GET("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Up and Running")
 	})
